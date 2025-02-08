@@ -18,7 +18,7 @@ const EventRoom: React.FC = () => {
   const navigate = useNavigate();
 
   const [message, setMessage] = useState<string | null>(null);
-  const [notifications, setNotifications] = useState<string | null>(null); // Single notification
+  const [_notifications, setNotifications] = useState<string | null>(null); // Single notification
   const [attendees, setAttendees] = useState<string[]>([]);
   const [eventDetails, setEventDetails] = useState<{ title: string; description: string; creator: string } | null>(null);
   const URL = import.meta.env.VITE_BACKEND_URL;
@@ -114,11 +114,11 @@ const EventRoom: React.FC = () => {
       </div>
 
       {/* Notifications */}
-      {notifications && (
+      {/* {notifications && (
         <div className="bg-blue-100 text-blue-700 p-3 rounded-md text-center mt-4">
           {notifications}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

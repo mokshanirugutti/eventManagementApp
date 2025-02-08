@@ -12,6 +12,7 @@ const EventsPage: React.FC = () => {
   const {user} = useUser();
   
   const [events, setEvents] = useState<Event[]>([]);
+  const [loading,setLoading] = useState<Boolean>(true)
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -19,6 +20,7 @@ const EventsPage: React.FC = () => {
       
       if (response && response.data) {
         setEvents(response.data); 
+        setLoading(false);
       }
     };
 
@@ -29,12 +31,14 @@ const EventsPage: React.FC = () => {
     <div className='pagePadding min-h-screen'>
       <h1 className='text-3xl text-center my-10'>Events</h1>
       
-
-      {user && <p className='text-sm text-gray-500 text-center'> hello {user.username}
+      {loading && <p className='text-sm text-center'>Loading events...</p>}
+      {user && 
+        <div className='flex justify-end px-5'>
         <Link to={'/create-event'}>
-          <Button variant="ghost">Create event</Button>
+          <Button variant="outline" className='bg-foreground/95 text-background '>Create event</Button>
         </Link>
-        </p>}
+        </div>
+        }
       <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2'>
         {events.map(event => (
             <EventComponent id={event._id} title={event.title} date={new Date(event.date).toLocaleDateString()} creator={event.creator.username} description={event.description} key={event._id}/>
