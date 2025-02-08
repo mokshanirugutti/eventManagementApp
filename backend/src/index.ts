@@ -7,10 +7,13 @@ import { setupWebSocket } from './websocket';
 import { connectDB } from './db/db';
 import authRoute from './routes/auth';
 import eventRoute from './routes/events';
+import cors from 'cors'
 
 dotenv.config();
 
 const app = express();
+app.use(cors())
+
 const PORT = process.env.PORT || 3000;
 
 const server = http.createServer(app);
@@ -27,7 +30,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Setup WebSocket
 setupWebSocket(io);
-
+app.use((req, res, next) => {
+  console.log(`Incoming ${req.method} request to ${req.url}`, req.body);
+  next();
+});
 // Routes
 app.use('/auth', authRoute);
 app.use('/events', eventRoute);

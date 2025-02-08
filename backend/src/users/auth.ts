@@ -52,13 +52,15 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 export const login = async (req: Request, res: Response): Promise<void> => {
     try {
         const { username, password } = req.body;
-
+        console.log(`login requet for ${username} and  ${password}`)
         // Find user
         const user = await User.findOne({ username });
         if (!user) {
             res.status(400).json({ error: 'Invalid credentials' });
             return;
         }
+        console.log('found user')
+        console.log(user)
 
         // Verify password
         const isMatch = await bcrypt.compare(password, user.password);

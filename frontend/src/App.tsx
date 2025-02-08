@@ -1,29 +1,33 @@
-import React, { useState } from 'react';
+import './App.css'
+import { BrowserRouter, Routes, Route } from "react-router";
+import Layout from './Layout';
+import HomePage from '@/pages/HomePage';
+import EventsPage from './pages/EventsPage';
+import RegisterPage from './auth/RegisterPage';
+import LoginPage from './auth/LoginPage';
+import ProtectedRoute from "./auth/ProtectedRoute"
 import EventRoom from './components/EventRoom';
+import CreateEvent from './components/events/CreateEvent';
 
-const App = () => {
-  const [userToken, setUserToken] = useState('');
-  const [eventId, setEventId] = useState('');
+function App() {
+  
 
   return (
-    <div>
-      <h1>Event Room</h1>
-      <input
-        type="text"
-        placeholder="Enter your token"
-        value={userToken}
-        onChange={(e) => setUserToken(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Enter event ID"
-        value={eventId}
-        onChange={(e) => setEventId(e.target.value)}
-      />
-      <button onClick={() => {/* Logic to join event */}}>Join Event</button>
-      {userToken && eventId && <EventRoom eventId={eventId} token={userToken} />}
-    </div>
-  );
-};
+    <BrowserRouter>
+    <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<HomePage/>} />
+          <Route path='/events' element={<EventsPage/>} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/event/:eventId" element={<EventRoom />} />
+            <Route path="/create-event" element={<CreateEvent />} />
+          </Route>
+        </Route>
+        <Route path='/register' element={<RegisterPage />}/>
+        <Route path='/login' element={<LoginPage/>}/>
+    </Routes>
+  </BrowserRouter>
+  )
+}
 
-export default App;
+export default App

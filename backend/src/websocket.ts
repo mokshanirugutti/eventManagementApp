@@ -53,7 +53,7 @@ export const setupWebSocket = (io: Server) => {
 
         socket.join(eventId);
         console.log(`User ${username} joined event room: ${eventId}`);
-        io.to(eventId).emit('message', participants.map(p => p.username));
+        io.to(eventId).emit('updateParticipants', participants.map(p => p.username));
       } catch (error) {
         socket.emit('unauthorized', 'Invalid token');
       }
