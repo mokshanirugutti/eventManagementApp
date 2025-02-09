@@ -101,14 +101,14 @@ const CreateEvent: React.FC = () => {
         value={date}
         onChange={(e) => setDate(e.target.value)}
         required
-        className="w-full px-3 py-2 mt-1 border rounded-md bg-transparent focus:ring-2 focus:ring-primary"
+        className="w-full px-3 py-2 mt-1 border rounded-md  focus:ring-2 focus:ring-foreground"
       />
     </div>
 
     {/* Submit Button */}
     <button
       type="submit"
-      className="w-full py-2 mt-4 font-semibold text-white rounded-md bg-primary hover:bg-primary-dark transition-all"
+      className="w-full py-2 mt-4 font-semibold  rounded-md bg-foreground text-background  transition-all"
     >
       Create Event
     </button>

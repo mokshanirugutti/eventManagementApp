@@ -66,4 +66,7 @@
   .pagePadding{
     @apply px-4 md:px-8 lg:px-24;
   }
+  input[type="datetime-local"] {
+    color-scheme: dark;
+  }
 }
