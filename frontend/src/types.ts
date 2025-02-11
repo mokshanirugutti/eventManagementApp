@@ -23,6 +23,7 @@ export interface EventComponentProps {
     date: string;
     creator: string;
     description:string;
+    onDelete: (id: string) => void
 }
 
 

@@ -27,6 +27,11 @@ const EventsPage: React.FC = () => {
     fetchEvents();
   }, []);
 
+  const handleDeleteEvent = (id: string) => {
+    setEvents((prevEvents) => prevEvents.filter((event) => event._id !== id));
+  };
+  
+
   return (
     <div className='pagePadding min-h-screen'>
       <h1 className='text-3xl text-center my-10'>Events</h1>
@@ -41,7 +46,9 @@ const EventsPage: React.FC = () => {
         }
       <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2'>
         {events.map(event => (
-            <EventComponent id={event._id} title={event.title} date={new Date(event.date).toLocaleDateString()} creator={event.creator.username} description={event.description} key={event._id}/>
+            <EventComponent id={event._id} title={event.title} date={new Date(event.date).toLocaleDateString()} creator={event.creator.username} description={event.description} key={event._id} 
+            onDelete={handleDeleteEvent}
+            />
         ))}
       </ul>
     </div>
