@@ -25,6 +25,8 @@ export const setupWebSocket = (io: Server) => {
     console.log('A user connected:', socket.id);
     socket.emit('message', `${socket.id} connected to the server!`);
 
+    // user joined event -----------------------------------
+
     socket.on('joinEventRoom', async (eventId: string) => {
       const token = socket.handshake.auth.token;
 
@@ -46,18 +48,37 @@ export const setupWebSocket = (io: Server) => {
         }
         const participants = eventParticipants.get(eventId)!;
 
-        if (!participants.some((p) => p.socketId === socket.id)) {
+           // Remove the user if they already exist (to handle reconnections)
+          const existingUserIndex = participants.findIndex((p) => p.username === username);
+          if (existingUserIndex !== -1) {
+            participants.splice(existingUserIndex, 1);
+          }
+
+          // Add the user with their new socket.id
           participants.push({ username, socketId: socket.id });
-        }
 
+              socket.join(eventId);
+              console.log(`User ${username} joined event room: ${eventId}`);
+              console.log('Current eventParticipants:', eventParticipants);
+              io.to(eventId).emit('updateParticipants', participants.map(p => p.username));
+            } catch (error) {
+              socket.emit('unauthorized', 'Invalid token');
+            }
+          });
 
-        socket.join(eventId);
-        console.log(`User ${username} joined event room: ${eventId}`);
-        io.to(eventId).emit('updateParticipants', participants.map(p => p.username));
-      } catch (error) {
-        socket.emit('unauthorized', 'Invalid token');
-      }
+    // user sent message in event room ----------------------------
+
+    socket.on('sendMessage', (eventId, message, sender) => {
+      console.log('eventParticipants on sendMessage:', eventParticipants);
+
+      const messageData = { sender, message, timestamp: new Date().toISOString() };
+      console.log('sending message data:', messageData);
+
+      // Broadcast the message to all clients in the event room
+      io.to(eventId).emit('receiveMessage', messageData);
     });
+
+    // user disconnect ------------------
 
     socket.on('disconnect', () => {
       console.log('A user disconnected:', socket.id);

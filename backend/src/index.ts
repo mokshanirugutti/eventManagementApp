@@ -22,6 +22,8 @@ export const io = new Server(server, {
     origin: '*',
     methods: ['GET', 'POST'],
   },
+  pingInterval: 25000, 
+  pingTimeout: 60000,  
 });
 
 // Middleware
